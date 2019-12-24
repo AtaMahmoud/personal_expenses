@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../models/transaction.dart';
+import '../widgets/chart.dart';
 import '../widgets/new_transaction.dart';
 
 class HomePage extends StatefulWidget {
@@ -7,6 +10,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final List<Transaction> _userTransaction = [];
+
+  List<Transaction> get _recentTransaction {
+    return _userTransaction.where((transaction) {
+      return transaction.date
+          .isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
+
   void _startAddNewTransaction(BuildContext context) {
     showBottomSheet(
         context: context,
@@ -23,13 +35,13 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: ()=>_startAddNewTransaction(context),
+            onPressed: () => _startAddNewTransaction(context),
           )
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[],
+          children: <Widget>[Chart(_recentTransaction)],
         ),
       ),
       floatingActionButton: FloatingActionButton(
