@@ -20,8 +20,8 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  void _startAddNewTransaction(BuildContext context) {
-    showBottomSheet(
+  void _startAddNewTransaction() {
+    showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return NewTransaction(_addTransaction);
@@ -46,21 +46,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text('Personal Expenses'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _startAddNewTransaction(),
+        )
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal Expenses'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startAddNewTransaction(context),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(_recentTransaction),
-            TransactionList(_userTransactions, _deleteTransaction),
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.4,
+                child: Chart(_recentTransaction)),
+            Container(height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.6,child: TransactionList(_userTransactions, _deleteTransaction)),
           ],
         ),
       ),
@@ -68,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         child: Icon(
           Icons.add,
         ),
-        onPressed: () => _startAddNewTransaction(context),
+        onPressed: () => _startAddNewTransaction(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
