@@ -23,8 +23,24 @@ class _HomePageState extends State<HomePage> {
     showBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return NewTransaction();
+          return NewTransaction(_addTransaction);
         });
+  }
+
+  void _addTransaction(String title, double amount, DateTime date) {
+    setState(() {
+      _userTransaction.add(Transaction(
+          amount: amount,
+          title: title,
+          date: date,
+          id: date.toIso8601String()));
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((transaction) => transaction.id == id);
+    });
   }
 
   @override

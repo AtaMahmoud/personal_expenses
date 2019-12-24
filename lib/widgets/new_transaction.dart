@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
+  final Function addTransaction;
+  NewTransaction(this.addTransaction);
   @override
   _NewTransactionState createState() => _NewTransactionState();
 }
@@ -25,6 +27,26 @@ class _NewTransactionState extends State<NewTransaction> {
     setState(() {
       _selectedDate=pickedDate;
     });
+  }
+
+  void _submitData() {
+    if (_amountController.text.isEmpty) {
+      return;
+    }
+    final enteredTitle = _titleController.text;
+    final enteredAmount = double.parse(_amountController.text);
+
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
+      return;
+    }
+
+    widget.addTransaction(
+      enteredTitle,
+      enteredAmount,
+      _selectedDate,
+    );
+
+    Navigator.of(context).pop();
   }
   @override
   Widget build(BuildContext context) {
@@ -67,7 +89,7 @@ class _NewTransactionState extends State<NewTransaction> {
               child: Text("Add Transaction"),
               color: Theme.of(context).primaryColor,
               textColor: Theme.of(context).textTheme.button.color,
-              onPressed: () {},
+              onPressed: _submitData,
             )
           ],
         ),
