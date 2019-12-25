@@ -13,19 +13,18 @@ class _NewTransactionState extends State<NewTransaction> {
   final _amountController = TextEditingController();
   DateTime _selectedDate;
 
-  Future<void> _openDatePicker()async{
-    final pickedDate=await showDatePicker(
+  Future<void> _openDatePicker() async {
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2019),
       lastDate: DateTime.now(),
     );
 
-    if(pickedDate==null) 
-      return;
+    if (pickedDate == null) return;
 
     setState(() {
-      _selectedDate=pickedDate;
+      _selectedDate = pickedDate;
     });
   }
 
@@ -48,50 +47,59 @@ class _NewTransactionState extends State<NewTransaction> {
 
     Navigator.of(context).pop();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: "Title"),
-            ),
-            TextField(
-              controller: _amountController,
-              decoration: InputDecoration(labelText: "Amount"),
-              keyboardType: TextInputType.number,
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(_selectedDate == null
-                        ? 'No Date Chosen!'
-                        : "Picked Date: ${DateFormat.yMd().format(_selectedDate)}"),
-                  ),
-                  FlatButton(
-                    child: Text('Choose Date',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),),
-                      onPressed: _openDatePicker,
-                  )
-                ],
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+              top: 10,
+              left: 10,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: "Title"),
               ),
-            ),
-            RaisedButton(
-              child: Text("Add Transaction"),
-              color: Theme.of(context).primaryColor,
-              textColor: Theme.of(context).textTheme.button.color,
-              onPressed: _submitData,
-            )
-          ],
+              TextField(
+                controller: _amountController,
+                decoration: InputDecoration(labelText: "Amount"),
+                keyboardType: TextInputType.number,
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(_selectedDate == null
+                          ? 'No Date Chosen!'
+                          : "Picked Date: ${DateFormat.yMd().format(_selectedDate)}"),
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'Choose Date',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: _openDatePicker,
+                    )
+                  ],
+                ),
+              ),
+              RaisedButton(
+                child: Text("Add Transaction"),
+                color: Theme.of(context).primaryColor,
+                textColor: Theme.of(context).textTheme.button.color,
+                onPressed: _submitData,
+              )
+            ],
+          ),
         ),
       ),
     );
